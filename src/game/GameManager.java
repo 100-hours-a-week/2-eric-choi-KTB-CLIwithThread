@@ -1,27 +1,17 @@
 package game;
 
 import buildings.Building;
-import buildings.residential.Apartment;
-import buildings.residential.Townhouse;
-import buildings.residential.ResidentialBuilding;
-import buildings.commercial.Shoppingmall;
-import buildings.commercial.OfficeBuilding;
-import buildings.commercial.CommercialBuilding;
-import buildings.industrial.RecycleBuilding;
-import buildings.industrial.Factory;
-import buildings.industrial.IndustrialBuilding;
+import buildings.BuildBuildings;
 
-import java.util.Scanner;
 import java.util.Random;
 
 public class GameManager {
     private City city;
     private int turn;
-    private final Scanner scanner;
     private final Random random;
+    private BuildBuildings BuildBuildings;
 
     public GameManager() {
-        scanner = new Scanner(System.in);
         random = new Random();
         turn = 1;
     }
@@ -32,8 +22,7 @@ public class GameManager {
             try {
                 System.out.println("========도시 건설 시뮬레이터========");
                 System.out.println("새로운 도시의 시장이 되었습니다.");
-                System.out.print("도시의 이름을 입력해주세요 (한글 또는 영문만 가능): ");
-                cityName = scanner.nextLine().trim();
+                cityName = InputManager.getStringInput("도시의 이름을 입력해주세요 (한글 또는 영문만 가능): ");
 
                 // 빈 문자열 체크
                 if (cityName.isEmpty()) {
@@ -53,6 +42,7 @@ public class GameManager {
         }
 
         city = new City(cityName, 10000);
+        BuildBuildings = new BuildBuildings(city);
         System.out.println(cityName + " 시의 시장이 되신 걸 축하드립니다!");
         System.out.println("초기 자금: 10,000원");
     }
@@ -87,272 +77,33 @@ public class GameManager {
         System.out.println("5. 도시 상세 정보");
         System.out.println("6. 턴 종료");
         System.out.println("7. 게임 종료");
-        System.out.print("\n명령을 선택하세요: ");
 
-        try {
-            int result = scanner.nextInt();
-            scanner.nextLine();
+        int result = InputManager.getIntInputInRange("\n명령을 선택하세요: ", 1, 7);
 
-            switch (result) {
-                case 1 :
-                    buildResidential();
-                    break;
-                case 2 :
-                    buildCommercial();
-                    break;
-                case 3 :
-                    buildIndustrial();
-                    break;
-                case 4 :
-                    displayBuildings();
-                    processCommand();
-                case 5 :
-                    displayDetails();
-                    processCommand();
-                case 6 :
-                    return true;
-                case 7 :
-                    return false;
-                default :
-                    System.out.println("잘못된 명령입니다.");
-            }
-        } catch (Exception e) {
-            System.out.println("잘못된 명령입니다. 다시 입력해주세요.");
-            scanner.nextLine();
+        switch (result) {
+            case 1:
+                BuildBuildings.buildResidential();
+                break;
+            case 2:
+                BuildBuildings.buildCommercial();
+                break;
+            case 3:
+                BuildBuildings.buildIndustrial();
+                break;
+            case 4:
+                displayBuildings();
+                return processCommand();
+            case 5:
+                displayDetails();
+                return processCommand();
+            case 6:
+                return true;
+            case 7:
+                return false;
         }
         return true;
     }
 
-
-    private void buildResidential() {
-        System.out.println("\n=== 주거용 건물 건설 ===");
-        System.out.println("1. 아파트 (비용: 층수 × 1,000원)");
-        System.out.println("2. 타운하우스 (기본 1,000원, 정원 추가 500원)");
-        System.out.println("3. 건설 취소");
-        System.out.print("건물 유형을 선택하세요: ");
-
-        try {
-            int choice = scanner.nextInt();
-            scanner.nextLine();
-
-            ResidentialBuilding building = null;
-
-            switch (choice) {
-                case 1:
-                    while (true) {
-                        try {
-                            System.out.println("층수를 입력하세요 (1~30층): ");
-                            int floors = scanner.nextInt();
-                            scanner.nextLine();
-
-                            if (floors < 1 || floors > 30) {
-                                System.out.println("잘못된 층수입니다! 1~30 사이의 값을 입력해주세요.");
-                                continue;
-                            }
-                            building = new Apartment("아파트", floors * 1000, floors);
-                            break;
-                        } catch (Exception e) {
-                            System.out.println("숫자만 입력해주세요!");
-                            scanner.nextLine();
-                        }
-                    }
-                    break;
-
-                case 2:
-                    while (true) {
-                        try {
-                            System.out.println("정원을 포함하겠습니까? (1: 예, 0: 아니오): ");
-                            int gardenChoice = scanner.nextInt();
-                            scanner.nextLine();
-
-                            if (gardenChoice != 0 && gardenChoice != 1) {
-                                System.out.println("잘못된 입력입니다! 0 또는 1만 입력해주세요.");
-                                continue;
-                            }
-                            boolean garden = gardenChoice == 1;
-                            building = new Townhouse("타운하우스", garden ? 1500 : 1000, garden);
-                            break;
-                        } catch (Exception e) {
-                            System.out.println("숫자만 입력해주세요!");
-                            scanner.nextLine();
-                        }
-                    }
-                    break;
-                case 3:
-                    processCommand();
-                default:
-                    System.out.println("잘못된 선택입니다.");
-                    buildResidential();
-
-            }
-
-            if (building != null) {
-                if (city.buildResidential(building)) {
-                    System.out.println(building.getName() + " 건설 완료!");
-                } else {
-                    System.out.println("자금 부족으로 건설 불가!");
-                    processCommand();
-                }
-            }
-
-        } catch (Exception e) {
-            System.out.println("잘못된 입력입니다.");
-            scanner.nextLine();
-        }
-    }
-
-    private void buildCommercial() {
-        System.out.println("\n=== 상업용 건물 건설 ===");
-        System.out.println("1. 쇼핑몰 (비용: 3,000원)");
-        System.out.println("2. 오피스 빌딩 (비용: 5,000원)");
-        System.out.println("3. 건설 취소");
-        System.out.print("건물 유형을 선택하세요: ");
-
-        try {
-            int choice = scanner.nextInt();
-            scanner.nextLine();
-
-            CommercialBuilding building = null;
-            switch (choice) {
-                case 1:
-                    while (true) {
-                        try {
-                            System.out.print("예상 일일 방문객 수를 입력하세요: ");
-                            int visitors = scanner.nextInt();
-                            scanner.nextLine();
-
-                            if (visitors > city.getPopulation()) {
-                                System.out.println("방문객 수가 도시 인구보다 많을 수 없습니다!");
-                                System.out.println("현재 도시 인구: " + city.getPopulation());
-                                continue;
-                            }
-                            if (visitors <= 0) {
-                                System.out.println("방문객 수는 0보다 커야 합니다!");
-                                continue;
-                            }
-                            building = new Shoppingmall("쇼핑몰", 3000, visitors);
-                            break;
-                        } catch (Exception e) {
-                            System.out.println("숫자만 입력해주세요!");
-                            scanner.nextLine();
-                        }
-                    }
-                    break;
-
-                case 2:
-                    while (true) {
-                        try {
-                            System.out.print("입주 예정 회사 수를 입력하세요 (1~10): ");
-                            int companies = scanner.nextInt();
-                            scanner.nextLine();
-
-                            if (companies < 1 || companies > 10) {
-                                System.out.println("회사 수는 1~10 사이여야 합니다!");
-                                continue;
-                            }
-                            building = new OfficeBuilding("오피스빌딩", 5000, companies);
-                            break;
-                        } catch (Exception e) {
-                            System.out.println("숫자만 입력해주세요!");
-                            scanner.nextLine();
-                        }
-                    }
-                    break;
-
-                case 3:
-                    return;
-
-                default:
-                    System.out.println("잘못된 선택입니다.");
-                    return;
-            }
-
-            if (building != null) {
-                if (city.buildCommercial(building)) {
-                    System.out.println(building.getName() + " 건설 완료!");
-                } else {
-                    System.out.println("자금 부족으로 건설 불가!");
-                    return;
-                }
-            }
-
-        } catch (Exception e) {
-            System.out.println("잘못된 입력입니다.");
-            scanner.nextLine();
-        }
-    }
-
-
-    private void buildIndustrial() {
-        System.out.println("\n=== 공업용 건물 건설 ===");
-        System.out.println("1. 공장 (비용: 4,000원)");
-        System.out.println("2. 재활용처리장 (비용: 5,000원)");
-        System.out.println("3. 건설 취소");
-        System.out.print("건물 유형을 선택하세요: ");
-
-        try {
-            int choice = scanner.nextInt();
-            scanner.nextLine();
-
-            IndustrialBuilding building = null;
-            switch (choice) {
-                case 1:
-                    while (true) {
-                        try {
-                            System.out.print("공장 크기를 입력하세요(크기와 같은 값으로 오염도가 증가합니다): ");
-                            int size = scanner.nextInt();
-                            scanner.nextLine();
-
-                            if (size <= 0) {
-                                System.out.println("공장 크기는 0보다 커야 합니다!");
-                                continue;
-                            }
-
-
-                            int futurePoulltion = city.getPollution() + (size);
-                            if (futurePoulltion > 100) {
-                                System.out.println("이 크기의 공장을 건설하면 오염도가 너무 높아집니다!");
-                                System.out.println("현재 오염도: " + city.getPollution());
-                                System.out.println("건설 후 예상 오염도: " + futurePoulltion);
-                                System.out.println("더 작은 크기의 공장을 건설해주세요.");
-                                continue;
-                            }
-
-                            building = new Factory("공장", 4000, size);
-                            break;
-                        } catch (Exception e) {
-                            System.out.println("숫자만 입력해주세요!");
-                            scanner.nextLine();
-                        }
-                    }
-                    break;
-
-                case 2:
-                    building = new RecycleBuilding("재활용처리장", 5000);
-                    break;
-
-                case 3:
-                    return;
-
-                default:
-                    System.out.println("잘못된 선택입니다.");
-                    return;
-            }
-
-            if (building != null) {
-                if (city.buildIndustrial(building)) {
-                    System.out.println(building.getName() + " 건설 완료!");
-                } else {
-                    System.out.println("자금 부족으로 건설 불가!");
-                    return;
-                }
-            }
-
-        } catch (Exception e) {
-            System.out.println("잘못된 입력입니다.");
-            scanner.nextLine();
-        }
-    }
 
     private void displayBuildings() {
         System.out.println("\n=== 건물 목록 ===");
