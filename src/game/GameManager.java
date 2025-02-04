@@ -2,11 +2,13 @@ package game;
 
 import buildings.Building;
 import buildings.BuildBuildings;
+import game.EconomyManager;
 
 import java.util.Random;
 
 public class GameManager {
     private City city;
+    private EconomyManager economyManager;
     private int turn;
     private final Random random;
     private BuildBuildings BuildBuildings;
@@ -43,6 +45,7 @@ public class GameManager {
 
         city = new City(cityName, 10000);
         BuildBuildings = new BuildBuildings(city);
+        economyManager = new EconomyManager(city);
         System.out.println(cityName + " 시의 시장이 되신 걸 축하드립니다!");
         System.out.println("초기 자금: 10,000원");
     }
@@ -160,10 +163,10 @@ public class GameManager {
 
     private void processTurnEnd() {
         // 세금 수입
-        city.collectTaxes();
+        economyManager.collectTaxes();
 
         // 유지비 지출
-        city.maintenanceCost();
+        economyManager.maintenanceCost();
 
         // 인구 자연 증가
         int growth = (int)(city.getPopulation() * 0.05);

@@ -13,8 +13,12 @@ public abstract class Building {
         this.maintenanceCost = maintenanceCost;
     }
     //메서드들
-    public abstract int calculateRevenue();
-    public abstract void calculateEffect(City city);
+    public int calculateRevenue(){
+        return 0;
+    };
+    public void calculateEffect(City city){
+
+    };
 
     public int getCapacity() {
         return 0;

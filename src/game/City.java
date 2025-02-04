@@ -111,38 +111,6 @@ public class City {
         return false;
     }
 
-
-    public void collectTaxes() {
-        int residentialRevenue = residentialBuildings.stream()
-                .mapToInt(Building::calculateRevenue)
-                .sum();
-        int commercialRevenue = commercialBuildings.stream()
-                .mapToInt(Building::calculateRevenue)
-                .sum();
-        int industrialRevenue = industrialBuildings.stream()
-                .mapToInt(Building::calculateRevenue)
-                .sum();
-
-        money += (residentialRevenue + commercialRevenue + industrialRevenue);
-    }
-
-    public void maintenanceCost() {
-        int residentialCost = residentialBuildings.stream()
-                .mapToInt(Building::getMaintenanceCost)
-                .sum();
-        int commercialCost = commercialBuildings.stream()
-                .mapToInt(Building::getMaintenanceCost)
-                .sum();
-        int industrialCost = industrialBuildings.stream()
-                .mapToInt(Building::getMaintenanceCost)
-                .sum();
-        money -= (residentialCost+commercialCost+industrialCost);
-
-        if(money< 0) {
-            happiness -= 10;
-        }
-    }
-
     private void updateCityStatus() {
         int totalCapacity = residentialBuildings.stream()
                 .mapToInt(Building::getCapacity)
