@@ -2,13 +2,14 @@ package buildings.commercial;
 
 import buildings.Building;
 import game.City;
+import utill.Constants;
 
 public abstract class CommercialBuilding extends Building {
     protected int revenue;
     protected int employees;
 
     public CommercialBuilding(String name, int cost) {
-        super(name, cost, 50);
+        super(name, cost, Constants.COMMERCIAL_MAINTENANCE);
         this.revenue = 100;
     }
 

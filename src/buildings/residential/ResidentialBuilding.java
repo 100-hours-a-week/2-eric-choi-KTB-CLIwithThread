@@ -1,13 +1,14 @@
 package buildings.residential;
 import buildings.Building;
 import game.City;
+import utill.Constants;
 
 public abstract class ResidentialBuilding extends Building{
     protected int capacity;
     protected int happiness;
 
     public ResidentialBuilding(String name, int cost) {
-        super(name, cost, 50);
+        super(name, cost, Constants.RESIDENTIAL_MAINTENANCE);
         this.capacity = 100;
         this.happiness = 100;
     }

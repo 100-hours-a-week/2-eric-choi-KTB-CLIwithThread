@@ -2,6 +2,7 @@ package buildings.industrial;
 
 import buildings.Building;
 import game.City;
+import utill.Constants;
 
 public abstract class IndustrialBuilding extends Building {
     protected int pollution;
@@ -9,7 +10,7 @@ public abstract class IndustrialBuilding extends Building {
 
 
     public IndustrialBuilding(String name, int cost) {
-        super(name, cost, 100);
+        super(name, cost, Constants.INDUSTRIAL_MAINTENANCE);
         this.pollution = 10;
         this.employees = 50;
     }

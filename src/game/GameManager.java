@@ -3,6 +3,7 @@ package game;
 import buildings.Building;
 import buildings.BuildBuildings;
 import game.EconomyManager;
+import utill.Constants;
 
 import java.util.Random;
 
@@ -43,7 +44,7 @@ public class GameManager {
             }
         }
 
-        city = new City(cityName, 10000);
+        city = new City(cityName);
         BuildBuildings = new BuildBuildings(city);
         economyManager = new EconomyManager(city);
         System.out.println(cityName + " 시의 시장이 되신 걸 축하드립니다!");
@@ -180,16 +181,16 @@ public class GameManager {
     }
 
     private void processRandomEvent() {
-        if (random.nextInt(100) < 10) {
+        if (random.nextInt(100) < Constants.EVENT_TRIGGER_CHANCE) {
             int eventType = random.nextInt(6);
             switch (eventType) {
                 case 0:
                     System.out.println("\n[이벤트] 축제가 열렸습니다! 행복도가 증가합니다.");
-                    city.addHappiness(5);
+                    city.addHappiness(Constants.FESTIVAL_HAPPINESS);
                     break;
                 case 1:
                     System.out.println("\n[이벤트] 환경 캠페인으로 공해가 감소했습니다!");
-                    city.addPollution(-5);
+                    city.addPollution(Constants.ENVIRONMENT_CAMPAIGN);
                     break;
                 case 2:
                     int bonus = random.nextInt(1000) + 500;
@@ -198,18 +199,18 @@ public class GameManager {
                     break;
                 case 3:
                     System.out.println("\n[이벤트] 자연재해가 발생했습니다! 행복도와 자금이 감소합니다.");
-                    city.addHappiness(-10);
-                    city.addMoney(-3000);
+                    city.addHappiness(Constants.DISASTER_HAPPINESS_PENALTY);
+                    city.addMoney(Constants.DISASTER_MONEY_PENALTY);
                     break;
                 case 4:
                     System.out.println("\n[이벤트] 기업 투자 유치! 고용이 증가합니다.");
-                    city.addEmployment(50);
-                    city.addMoney(2000);
+                    city.addEmployment(Constants.CORPORATE_INVESTMENT_EMPLOYMENT);
+                    city.addMoney(Constants.CORPORATE_INVESTMENT_MONEY);
                     break;
                 case 5:
                     System.out.println("\n[이벤트] 경제 불황! 세수가 감소합니다.");
-                    city.addMoney(-2500);
-                    city.addEmployment(-20);
+                    city.addMoney(Constants.ECONOMIC_RECESSION_MONEY);
+                    city.addEmployment(Constants.ECONOMIC_RECESSION_EMPLOYMENT);
                     break;
             }
         }

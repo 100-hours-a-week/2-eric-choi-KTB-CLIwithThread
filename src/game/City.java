@@ -6,6 +6,7 @@ import buildings.Building;
 import buildings.residential.ResidentialBuilding;
 import buildings.commercial.CommercialBuilding;
 import buildings.industrial.IndustrialBuilding;
+import utill.Constants;
 
 public class City {
     private String name;
@@ -19,11 +20,11 @@ public class City {
     private List<CommercialBuilding> commercialBuildings;
     private List<IndustrialBuilding> industrialBuildings;
 
-    public City(String name, int initialMoney) {
+    public City(String name) {
         this.name = name;
-        this.money = initialMoney;
-        this.population = 10;
-        this.happiness = 50;
+        this.money = Constants.INITIAL_MONEY;
+        this.population = Constants.INITIAL_POPULATION;
+        this.happiness = Constants.INITIAL_HAPPINESS;
         this.pollution = 0;
         this.employment = 0;
 
@@ -128,13 +129,13 @@ public class City {
             happiness += 5;
         }
 
-        happiness = Math.max(0, Math.min(100, happiness));
+        happiness = Math.max(0, Math.min(Constants.MAX_HAPPINESS, happiness));
     }
 
     public boolean isGameOver() {
-        if (happiness <= 0 || money < -5000) return true;
+        if (happiness <= 0 || money < -Constants.BANKRUPTCY_Trigger) return true;
 
-        if (pollution >= 100) {
+        if (pollution >= Constants.GAME_OVER_POLLUTION) {
             System.out.println("환경 파괴로 인한 게임 오버!");
             return true;
         }

@@ -1,5 +1,7 @@
 package game;
 
+import utill.Constants;
+
 import java.util.Scanner;
 
 public class InputManager {
@@ -85,7 +87,7 @@ public class InputManager {
         while (true) {
             int size = getPositiveIntInput(prompt);
             int futurePollution = currentPollution + (size * 2);
-            if (futurePollution <= 100) {
+            if (futurePollution <= Constants.MAX_POLLUTION) {
                 return size;
             }
             System.out.println("이 크기의 공장을 건설하면 오염도가 너무 높아집니다!");

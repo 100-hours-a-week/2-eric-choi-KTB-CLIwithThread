@@ -5,6 +5,7 @@ import buildings.commercial.*;
 import buildings.industrial.*;
 import game.InputManager;
 import game.City;
+import utill.Constants;
 
 public class BuildBuildings {
     private final City city;
@@ -25,13 +26,13 @@ public class BuildBuildings {
         switch (choice) {
             case 1:
                 int floors = InputManager.getIntInputInRange("층수를 입력하세요 (1~30층): ", 1, 30);
-                building = new Apartment("아파트", floors * 1000, floors);
+                building = new Apartment("아파트", floors * Constants.APARTMENT_BASE_COST, floors);
                 break;
 
             case 2:
                 int gardenChoice = InputManager.getIntInputInRange("정원을 포함하겠습니까? (1: 예, 0: 아니오): ", 0, 1);
                 boolean garden = gardenChoice == 1;
-                building = new Townhouse("타운하우스", garden ? 1500 : 1000, garden);
+                building = new Townhouse("타운하우스", garden ? Constants.TOWNHOUSE_BASE_COST + Constants.TOWNHOUSE_GARDEN_COST : Constants.TOWNHOUSE_BASE_COST, garden);
                 break;
 
             case 3:
@@ -53,12 +54,12 @@ public class BuildBuildings {
         switch (choice) {
             case 1:
                 int visitors = InputManager.getVisitorInput("예상 일일 방문객 수를 입력하세요: ", city.getPopulation());
-                building = new Shoppingmall("쇼핑몰", 3000, visitors);
+                building = new Shoppingmall("쇼핑몰", Constants.SHOPPING_MALL_COST, visitors);
                 break;
 
             case 2:
                 int companies = InputManager.getIntInputInRange("입주 예정 회사 수를 입력하세요 (1~10): ", 1, 10);
-                building = new OfficeBuilding("오피스빌딩", 5000, companies);
+                building = new OfficeBuilding("오피스빌딩", Constants.OFFICE_BUILDING_COST, companies);
                 break;
 
             case 3:
@@ -80,11 +81,11 @@ public class BuildBuildings {
         switch (choice) {
             case 1:
                 int size = InputManager.getFactorySizeInput("공장 크기를 입력하세요(크기와 같은 값으로 오염도가 증가합니다): ", city.getPollution());
-                building = new Factory("공장", 4000, size);
+                building = new Factory("공장", Constants.FACTORY_COST, size);
                 break;
 
             case 2:
-                building = new RecycleBuilding("재활용처리장", 5000);
+                building = new RecycleBuilding("재활용처리장", Constants.RECYCLE_BUILDING_COST);
                 break;
 
             case 3:
