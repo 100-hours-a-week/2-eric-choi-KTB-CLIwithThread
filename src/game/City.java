@@ -64,16 +64,16 @@ public class City {
     }
 
     public void addPopulation(int amount) {
-        this.population += Math.max(0, this.population + amount);
+        this.population = Math.max(0, this.population + amount);
     }
     public void addPollution(int amount) {
-        this.pollution += Math.max(0, this.pollution + amount);;
+        this.pollution = Math.max(0, this.pollution + amount);;
     }
     public void addHappiness(int amount) {
-        this.happiness += Math.max(0, Math.min(100, this.happiness + amount));;
+        this.happiness = Math.max(0, Math.min(100, this.happiness + amount));;
     }
     public void addEmployment(int amount) {
-        this.employment += Math.max(0, this.employment + amount);;
+        this.employment = Math.max(0, this.employment + amount);;
     }
     public void addMoney(int amount) {
         this.money += amount;
@@ -133,7 +133,11 @@ public class City {
     }
 
     public boolean isGameOver() {
-        if (happiness <= 0 || money < -Constants.BANKRUPTCY_Trigger) return true;
+        if (happiness <= 0 || money < Constants.BANKRUPTCY_Trigger) {
+            System.out.println("게임 오버!");
+            return true;
+
+        }
 
         if (pollution >= Constants.GAME_OVER_POLLUTION) {
             System.out.println("환경 파괴로 인한 게임 오버!");

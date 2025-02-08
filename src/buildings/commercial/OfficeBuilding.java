@@ -6,7 +6,7 @@ public class OfficeBuilding extends CommercialBuilding{
     public OfficeBuilding (String name, int cost, int companies){
         super(name, cost);
         this.companies = companies;
-        this.revenue = companies * 200;
+        this.revenue = companies * 100;
         this.employees = companies * 10;
     }
 }

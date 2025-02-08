@@ -6,6 +6,7 @@ import buildings.industrial.*;
 import game.InputManager;
 import game.City;
 import utill.Constants;
+import utill.ThreadedText;
 
 public class BuildBuildings {
     private final City city;
@@ -15,10 +16,10 @@ public class BuildBuildings {
     }
 
     public void buildResidential() {
-        System.out.println("\n=== 주거용 건물 건설 ===");
-        System.out.println("1. 아파트 (비용: 층수 × 1,000원)");
-        System.out.println("2. 타운하우스 (기본 1,000원, 정원 추가 500원)");
-        System.out.println("3. 건설 취소");
+        ThreadedText.printTextSync("\n=== 주거용 건물 건설 ===");
+        ThreadedText.printTextSync("1. 아파트 (비용: 층수 × 500원)");
+        ThreadedText.printTextSync("2. 타운하우스 (기본 1,000원, 정원 추가 500원)");
+        ThreadedText.printTextSync("3. 건설 취소");
 
         ResidentialBuilding building = null;
         int choice = InputManager.getIntInputInRange("건물 유형을 선택하세요: ", 1, 3);
@@ -43,10 +44,10 @@ public class BuildBuildings {
     }
 
     public void buildCommercial() {
-        System.out.println("\n=== 상업용 건물 건설 ===");
-        System.out.println("1. 쇼핑몰 (비용: 3,000원)");
-        System.out.println("2. 오피스 빌딩 (비용: 5,000원)");
-        System.out.println("3. 건설 취소");
+        ThreadedText.printTextSync("\n=== 상업용 건물 건설 ===");
+        ThreadedText.printTextSync("1. 쇼핑몰 (비용: 3,000원)");
+        ThreadedText.printTextSync("2. 오피스 빌딩 (비용: 5,000원)");
+        ThreadedText.printTextSync("3. 건설 취소");
 
         CommercialBuilding building = null;
         int choice = InputManager.getIntInputInRange("건물 유형을 선택하세요: ", 1, 3);
@@ -70,10 +71,10 @@ public class BuildBuildings {
     }
 
     public void buildIndustrial() {
-        System.out.println("\n=== 공업용 건물 건설 ===");
-        System.out.println("1. 공장 (비용: 4,000원)");
-        System.out.println("2. 재활용처리장 (비용: 5,000원)");
-        System.out.println("3. 건설 취소");
+        ThreadedText.printText("\n=== 공업용 건물 건설 ===");
+        ThreadedText.printTextSync("1. 공장 (비용: 4,000원)");
+        ThreadedText.printTextSync("2. 재활용처리장 (비용: 5,000원)");
+        ThreadedText.printTextSync("3. 건설 취소");
 
         IndustrialBuilding building = null;
         int choice = InputManager.getIntInputInRange("건물 유형을 선택하세요: ", 1, 3);
@@ -112,6 +113,11 @@ public class BuildBuildings {
 
             if (success) {
                 System.out.println(building.getName() + " 건설 완료!");
+                System.out.println("DEBUG - 건설 후:");
+                System.out.println("행복도: " + city.getHappiness());
+                System.out.println("자금: " + city.getMoney());
+                System.out.println("인구: " + city.getPopulation());
+                System.out.println("오염도: " + city.getPollution());
             } else {
                 System.out.println("자금 부족으로 건설 불가!");
             }
