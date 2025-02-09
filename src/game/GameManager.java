@@ -3,16 +3,18 @@ package game;
 import buildings.Building;
 import buildings.BuildBuildings;
 import utill.ThreadedText;
-import utill.Constants;
+import game.EndTurnManager;
 
 import java.util.Random;
 
 public class GameManager {
     private City city;
     private EconomyManager economyManager;
+    private EndTurnManager endTurnManager;
     private int turn;
     private final Random random;
     private BuildBuildings BuildBuildings;
+
 
     public GameManager() {
         random = new Random();
@@ -47,30 +49,11 @@ public class GameManager {
         city = new City(cityName);
         BuildBuildings = new BuildBuildings(city);
         economyManager = new EconomyManager(city);
+        endTurnManager = new EndTurnManager(city, economyManager);
         ThreadedText.printTextSync(cityName + " 시의 시장이 되신 걸 축하드립니다!");
         ThreadedText.printTextSync("초기 자금: 10,000원");
     }
 
-    private void displayStatus() {
-        ThreadedText.printText("=== " + city.getName() + " 현황" + " ( " + turn + " 턴)" + " ===");
-        ThreadedText.printTextSync(String.format("현재 자금: %d원", city.getMoney()));
-        ThreadedText.printTextSync(String.format("현재 인구: %d명", city.getPopulation()));
-        ThreadedText.printTextSync(String.format("현재 행복도: %d", city.getHappiness()));
-        ThreadedText.printTextSync(String.format("현재 고용: %d명", city.getEmployment()));
-        ThreadedText.printTextSync(String.format("현재 오염도: %d", city.getPollution()));
-
-        if (city.getMoney() < 1000 ) {
-            ThreadedText.printText("자금 관리가 필요합니다.");
-        }
-        if (city.getHappiness() < 20 ) {
-            ThreadedText.printText("시민들의 원성이 자자합니다.");
-        }
-        if (city.getPollution() > 50 ) {
-            ThreadedText.printText("도시가 더럽습니다.");
-        }
-
-
-    }
 
     private boolean processCommand() {
         ThreadedText.printTextSync("\n=== 행동 선택 ===");
@@ -109,6 +92,12 @@ public class GameManager {
     }
 
 
+    private void processTurnEnd() {
+        endTurnManager.processEndTurn();
+    }
+
+
+
     private void displayBuildings() {
         ThreadedText.printText("\n=== 건물 목록 ===");
         int totalMaintenance = 0;
@@ -140,11 +129,11 @@ public class GameManager {
             totalMaintenance += b.getMaintenanceCost();
         }
 
-        ThreadedText.printText(String.format("\n총 유지비: %,d원/턴\n", totalMaintenance));
+        ThreadedText.printTextSync(String.format("\n총 유지비: %,d원/턴\n", totalMaintenance));
     }
 
     private void displayDetails() {
-        ThreadedText.printText("\n=== 도시 상세 정보 ===");
+        ThreadedText.printTextSync("\n=== 도시 상세 정보 ===");
         ThreadedText.printTextSync(String.format("도시 이름: %s", city.getName()));
         ThreadedText.printTextSync(String.format("현재 턴: %d", turn));
         ThreadedText.printTextSync(String.format("자금: %,d원", city.getMoney()));
@@ -162,29 +151,22 @@ public class GameManager {
         ThreadedText.printTextSync(String.format("- 공업용 건물: %d개", city.getIndustrialBuildings().size()));
     }
 
-    private void processTurnEnd() {
-        // 세금 수입
-        economyManager.collectTaxes();
+    private void displayStatus() {
+        ThreadedText.printTextSync("=== " + city.getName() + " 현황" + " ( " + turn + " 턴)" + " ===");
+        ThreadedText.printTextSync(String.format("현재 자금: %d원", city.getMoney()));
+        ThreadedText.printTextSync(String.format("현재 인구: %d명", city.getPopulation()));
+        ThreadedText.printTextSync(String.format("현재 행복도: %d", city.getHappiness()));
+        ThreadedText.printTextSync(String.format("현재 고용: %d명", city.getEmployment()));
+        ThreadedText.printTextSync(String.format("현재 오염도: %d", city.getPollution()));
 
-        // 유지비 지출
-        economyManager.maintenanceCost();
-
-        // 인구 자연 증가
-        int growth = (int)(city.getPopulation() * 0.05);
-        if (growth > 0) {
-            city.addPopulation(growth);
-            ThreadedText.printText(String.format("\n인구가 %d명 증가했습니다.\n", growth));
+        if (city.getMoney() < 1000 ) {
+            ThreadedText.printText("자금 관리가 필요합니다.");
         }
-
-        // 랜덤 이벤트
-        processRandomEvent();
-    }
-
-    private void processRandomEvent() {
-        if (random.nextInt(100) < Constants.EVENT_TRIGGER_CHANCE) {
-            EventManager event = EventManager.getRandomEvent();
-            ThreadedText.printText("\n[이벤트] " + event.getScript());
-            event.eventEffect(city);
+        if (city.getHappiness() < 20 ) {
+            ThreadedText.printText("시민들의 원성이 자자합니다.");
+        }
+        if (city.getPollution() > 50 ) {
+            ThreadedText.printText("도시가 더럽습니다.");
         }
     }
 
@@ -201,6 +183,9 @@ public class GameManager {
         ThreadedText.printText(String.format("건설한 건물 수: %d개\n",
                 city.getResidentialBuildings().size() + city.getCommercialBuildings().size()));
     }
+
+
+
 
     public static void main(String[] args) {
         GameManager game = new GameManager();

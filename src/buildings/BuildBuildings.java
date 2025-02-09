@@ -113,11 +113,6 @@ public class BuildBuildings {
 
             if (success) {
                 System.out.println(building.getName() + " 건설 완료!");
-                System.out.println("DEBUG - 건설 후:");
-                System.out.println("행복도: " + city.getHappiness());
-                System.out.println("자금: " + city.getMoney());
-                System.out.println("인구: " + city.getPopulation());
-                System.out.println("오염도: " + city.getPollution());
             } else {
                 System.out.println("자금 부족으로 건설 불가!");
             }

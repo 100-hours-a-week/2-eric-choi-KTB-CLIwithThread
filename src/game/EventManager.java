@@ -4,21 +4,21 @@ import utill.Constants;
 import utill.ThreadedText;
 
 public enum EventManager {
-    FESTIVAL("축제가 열렸습니다! 행복도가 증가합니다.") {
+    FESTIVAL("축제가 열렸습니다! 행복도가 증가합니다.\n") {
         @Override
         public void eventEffect(City city) {
             city.addHappiness(Constants.FESTIVAL_HAPPINESS);
         }
     },
 
-    Environment ("환경 캠페인으로 공해가 감소했습니다.") {
+    Environment ("환경 캠페인으로 공해가 감소했습니다.\n") {
         @Override
         public void eventEffect(City city) {
              city.addPollution(Constants.ENVIRONMENT_CAMPAIGN);
         }
     },
 
-    GOVERNMENT_SUPPLY ("국가 보조금을 받았습니다") {
+    GOVERNMENT_SUPPLY ("국가 보조금을 받았습니다.") {
         @Override
         public void eventEffect(City city) {
             int bonus = (int)(Math.random() * 1000 ) + 500;
@@ -27,7 +27,7 @@ public enum EventManager {
         }
     },
 
-    NATURAL_DISASTER("자연재해가 발생했습니다! 행복도와 자금이 감소합니다.") {
+    NATURAL_DISASTER("자연재해가 발생했습니다! 행복도와 자금이 감소합니다.\n") {
         @Override
         public void eventEffect(City city) {
             city.addHappiness(Constants.DISASTER_HAPPINESS_PENALTY);
@@ -35,7 +35,7 @@ public enum EventManager {
         }
     },
 
-    CORPORATE_INVESTMENT("기업 투자 유치! 고용이 증가합니다.") {
+    CORPORATE_INVESTMENT("기업 투자 유치! 고용이 증가합니다.\n") {
         @Override
         public void eventEffect(City city) {
             city.addEmployment(Constants.CORPORATE_INVESTMENT_EMPLOYMENT);
@@ -43,7 +43,7 @@ public enum EventManager {
         }
     },
 
-    ECONOMIC_RECESSION("경제 불황! 세수가 감소합니다.") {
+    ECONOMIC_RECESSION("경제 불황! 세수가 감소합니다.\n") {
         @Override
         public void eventEffect (City city) {
             city.addMoney(Constants.ECONOMIC_RECESSION_MONEY);
