@@ -29,7 +29,7 @@ public class Constants {
     public static final int GAME_OVER_POLLUTION = 100;
 
     // 이벤트 관련 상수
-    public static final int EVENT_TRIGGER_CHANCE = 100; // 10%
+    public static final int EVENT_TRIGGER_CHANCE = 10; // 10%
     public static final int FESTIVAL_HAPPINESS = 5;
     public static final int ENVIRONMENT_CAMPAIGN = -5;
     public static final int DISASTER_HAPPINESS_PENALTY = -10;
