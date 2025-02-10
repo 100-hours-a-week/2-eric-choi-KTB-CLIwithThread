@@ -3,7 +3,6 @@ package game;
 import buildings.Building;
 import buildings.BuildBuildings;
 import utill.ThreadedText;
-import game.EndTurnManager;
 
 import java.util.Random;
 
@@ -183,8 +182,6 @@ public class GameManager {
         ThreadedText.printText(String.format("건설한 건물 수: %d개\n",
                 city.getResidentialBuildings().size() + city.getCommercialBuildings().size()));
     }
-
-
 
 
     public static void main(String[] args) {
